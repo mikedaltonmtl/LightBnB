@@ -23,6 +23,20 @@ const pool = new Pool({
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithEmail = function(email) {
+  return pool
+    .query(`SELECT id FROM users WHERE  LIMIT 1`, [email])
+    .then((result) => {
+      console.log(result.rows);
+      return result.rows;
+      //       return null;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+exports.getUserWithEmail = getUserWithEmail;
+/*
+const getUserWithEmail = function(email) {
   let user;
   for (const userId in users) {
     user = users[userId];
@@ -34,7 +48,7 @@ const getUserWithEmail = function(email) {
   }
   return Promise.resolve(user);
 }
-exports.getUserWithEmail = getUserWithEmail;
+*/
 
 /**
  * Get a single user from the database given their id.
