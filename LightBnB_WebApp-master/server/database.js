@@ -122,11 +122,6 @@ const getAllReservations = function(guest_id, limit = 10) {
       console.log(err.message);
     });
   }
-/*
-const getAllReservations = function(guest_id, limit = 10) {
-  return getAllProperties(null, 2);
-}
-*/
 exports.getAllReservations = getAllReservations;
 
 /// Properties
