@@ -2,8 +2,16 @@
 // const properties = require('./json/properties.json');
 // const users = require('./json/users.json');
 
+// Use database adapter file (index.js) to interact with PostgreSQL DB
+const db = require('./index.js');
+
+
+// Original pool coding, replaced by index.js ---------------------------
+
 // Create pool to connect to lightbnb database
+/*
 const { Pool } = require('pg');
+const { rows } = require('pg/lib/defaults.js');
 
 const pool = new Pool({
   user: 'vagrant',
@@ -11,6 +19,9 @@ const pool = new Pool({
   host: 'localhost',
   database: 'lightbnb'
 });
+*/
+// ----------------------------------------------------------------------
+
 
 // test connection
 // pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)});
@@ -24,7 +35,7 @@ const pool = new Pool({
  * @return {result.rows[0]} As a promise to the user (or null if email does not exist).
  */
 const getUserWithEmail = function(email) {
-  return pool
+  return db
     .query(`SELECT * FROM users WHERE email = $1;`, [email])
     .then((result) => {
       if (result.rows[0]) {
@@ -46,7 +57,7 @@ exports.getUserWithEmail = getUserWithEmail;
  * @return {result.rows[0]} As a promise to the user (or null if the id does not exist).
  */
 const getUserWithId = function(id) {
-  return pool
+  return db
     .query(`SELECT * FROM users WHERE id = $1;`, [id])
     .then((result) => {
       if (result.rows[0]) {
@@ -75,7 +86,7 @@ const addUser = function(user) {
   `;
   const data = [user.name, user.email, user.password];
 
-  return pool
+  return db
     .query(queryString, data)
     .then((result) => {
       if (result.rows[0]) {
@@ -111,7 +122,7 @@ const getAllReservations = function(guest_id, limit = 10) {
   `;
   const data = [guest_id, limit];
 
-  return pool
+  return db
     .query(queryString, data)
     .then((result) => {
       if (result.rows) {
@@ -208,7 +219,7 @@ const getAllProperties = (options, limit = 10) => {
   console.log(queryString, queryParams);
 
   // Run the query.
-  return pool
+  return db
     .query(queryString, queryParams)
     .then((result) => {
       return result.rows;
@@ -267,7 +278,7 @@ const addProperty = function(property) {
   // Console log everything just to make sure we've done it right.
   console.log(queryString, queryParams);
 
-  return pool
+  return db
     .query(queryString, queryParams)
     .then((result) => {
       if (result.rows[0]) {
