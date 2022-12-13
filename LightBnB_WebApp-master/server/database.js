@@ -1,7 +1,8 @@
-const properties = require('./json/properties.json');
-const users = require('./json/users.json');
+// original code using hard-coded objects as data
+// const properties = require('./json/properties.json');
+// const users = require('./json/users.json');
 
-// Creaste pool to connect to lightbnb database
+// Create pool to connect to lightbnb database
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -20,7 +21,7 @@ const pool = new Pool({
 /**
  * Get a single user from the database given their email.
  * @param {String} email The email of the user.
- * @return {Promise<{}>} A promise to the user.
+ * @return {result.rows[0]} As a promise to the user (or null if email does not exist).
  */
 const getUserWithEmail = function(email) {
   return pool
@@ -30,19 +31,19 @@ const getUserWithEmail = function(email) {
         return result.rows[0];
       } else {
         return null;
-      }     
+      }
     })
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getUserWithEmail = getUserWithEmail;
 
 
 /**
  * Get a single user from the database given their id.
  * @param {string} id The id of the user.
- * @return {Promise<{}>} A promise to the user.
+ * @return {result.rows[0]} As a promise to the user (or null if the id does not exist).
  */
 const getUserWithId = function(id) {
   return pool
@@ -52,19 +53,19 @@ const getUserWithId = function(id) {
         return result.rows[0];
       } else {
         return null;
-      }     
+      }
     })
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.getUserWithId = getUserWithId;
 
 
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
- * @return {Promise<{}>} A promise to the user.
+ * @return {result.rows[0]} As a promise to the user (or null if the insert did not complete).
  */
 const addUser = function(user) {
   const queryString = `
@@ -81,12 +82,12 @@ const addUser = function(user) {
         return result.rows[0];
       } else {
         return null;
-      }     
+      }
     })
     .catch((err) => {
       console.log(err.message);
     });
-}
+};
 exports.addUser = addUser;
 
 /// Reservations
@@ -94,7 +95,8 @@ exports.addUser = addUser;
 /**
  * Get all reservations for a single user.
  * @param {string} guest_id The id of the user.
- * @return {Promise<[{}]>} A promise to the reservations.
+ * @param {*} limit The number of results to return.
+ * @return {result.rows} As a promise to the reservations (or null if no reservations returned for the given guest_id).
  */
 const getAllReservations = function(guest_id, limit = 10) {
   const queryString = `
@@ -116,12 +118,12 @@ const getAllReservations = function(guest_id, limit = 10) {
         return result.rows;
       } else {
         return null;
-      }     
+      }
     })
     .catch((err) => {
       console.log(err.message);
     });
-  }
+};
 exports.getAllReservations = getAllReservations;
 
 /// Properties
@@ -130,7 +132,7 @@ exports.getAllReservations = getAllReservations;
  * Get all properties.
  * @param {{}} options An object containing query options.
  * @param {*} limit The number of results to return.
- * @return {Promise<[{}]>}  A promise to the properties.
+ * @return {result.rows}  A promise to the properties.
  */
 const getAllProperties = (options, limit = 10) => {
   // Check the options object that has been passed
@@ -164,7 +166,7 @@ const getAllProperties = (options, limit = 10) => {
     multipleWheres = true;
     queryString += `owner_id = $${queryParams.length} `;
   }
-  // Check for minimum & maximum cost parameters... both are passed
+  // Check for minimum & maximum cost parameters... here, both are passed
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
     queryString += multipleWheres ? `AND ` : 'WHERE ';
     multipleWheres = true;
@@ -209,7 +211,6 @@ const getAllProperties = (options, limit = 10) => {
   return pool
     .query(queryString, queryParams)
     .then((result) => {
-      // console.log(result.rows);
       return result.rows;
     })
     .catch((err) => {
@@ -221,12 +222,62 @@ exports.getAllProperties = getAllProperties;
 /**
  * Add a property to the database
  * @param {{}} property An object containing all of the property details.
- * @return {Promise<{}>} A promise to the property.
+ * @return {result.rows[0]} A promise to the property.
  */
 const addProperty = function(property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
-}
+  const queryString = `
+  INSERT INTO properties (
+    owner_id, 
+    title, 
+    description, 
+    thumbnail_photo_url, 
+    cover_photo_url, 
+    cost_per_night, 
+    parking_spaces, 
+    number_of_bathrooms, 
+    number_of_bedrooms, 
+    country, 
+    street, 
+    city, 
+    province, 
+    post_code, 
+    active
+  )
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, TRUE)
+  RETURNING *;
+`;
+
+  const queryParams = [
+    property.owner_id,
+    property.title,
+    property.description,
+    property.thumbnail_photo_url,
+    property.cover_photo_url,
+    property.cost_per_night,
+    property.parking_spaces,
+    property.number_of_bathrooms,
+    property.number_of_bedrooms,
+    property.country,
+    property.street,
+    property.city,
+    property.province,
+    property.post_code
+  ];
+
+  // Console log everything just to make sure we've done it right.
+  console.log(queryString, queryParams);
+
+  return pool
+    .query(queryString, queryParams)
+    .then((result) => {
+      if (result.rows[0]) {
+        return result.rows[0];
+      } else {
+        return null;
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
 exports.addProperty = addProperty;

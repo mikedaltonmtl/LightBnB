@@ -1,4 +1,7 @@
-INSERT INTO users (name, email, password)
+-- PostgreSQL instruction to insert seeds:
+-- \i seeds/01_seeds.sql
+
+NSERT INTO users (name, email, password)
 VALUES
 ('Eva Stanley', 'sebastianguerra@ymail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'),
 ('Louisa Meyer', 'jacksonrose@hotmail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'),

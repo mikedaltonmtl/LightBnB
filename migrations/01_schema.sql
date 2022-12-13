@@ -1,3 +1,4 @@
+-- PostgreSQL instruction to create then connect to database on first use:
 -- CREATE DATABASE lightbnb;
 -- \c lightbnb
 
@@ -52,4 +53,5 @@ CREATE TABLE property_reviews (
   message TEXT
 );
 
+-- PostgreSQL instruction to run file:
 -- \i migrations/01_schema.sql

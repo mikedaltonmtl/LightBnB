@@ -17,5 +17,5 @@ CREATE TABLE guest_reviews (
   rating SMALLINT NOT NULL DEFAULT 0,
   message TEXT
 );
-
+-- PostgreSQL instruction to run file:
 -- \i migrations/02_stretch.sql
