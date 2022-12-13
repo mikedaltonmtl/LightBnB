@@ -8,6 +8,7 @@ Order the results from lowest cost_per_night to highest cost_per_night.
 Limit the number of results to 10.
 Only show listings that have a rating >= 4 stars.
 */
+
 SELECT properties.id, title, cost_per_night, AVG(rating)
 FROM properties
   INNER JOIN property_reviews ON properties.id = property_reviews.property_id

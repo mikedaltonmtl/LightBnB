@@ -36,7 +36,7 @@ GROUP BY reservations.id, properties.title, properties.cost_per_night
 ORDER BY reservations.start_date ASC
 LIMIT 10;
 */
--- correct answer from Compass, gives same output as my answer above:
+-- answer from Compass, gives same output as my answer above:
 SELECT reservations.id, properties.title, properties.cost_per_night, reservations.start_date, avg(rating) as average_rating
 FROM reservations
 JOIN properties ON reservations.property_id = properties.id

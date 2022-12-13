@@ -1,3 +1,6 @@
+-- PostgreSQL instruction to run file:
+-- \i migrations/02_stretch.sql
+
 DROP TABLE IF EXISTS rates CASCADE;
 DROP TABLE IF EXISTS guest_reviews CASCADE;
 
@@ -17,5 +20,3 @@ CREATE TABLE guest_reviews (
   rating SMALLINT NOT NULL DEFAULT 0,
   message TEXT
 );
--- PostgreSQL instruction to run file:
--- \i migrations/02_stretch.sql

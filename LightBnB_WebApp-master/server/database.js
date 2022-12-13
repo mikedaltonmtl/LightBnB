@@ -1,27 +1,5 @@
-// original code using hard-coded objects as data
-// const properties = require('./json/properties.json');
-// const users = require('./json/users.json');
-
-// Use database adapter file (index.js) to interact with PostgreSQL DB
+// Use database adapter file (index.js) to interact with PostgreSQL DB.
 const db = require('./index.js');
-
-
-// Original pool coding, replaced by index.js ---------------------------
-
-// Create pool to connect to lightbnb database
-/*
-const { Pool } = require('pg');
-const { rows } = require('pg/lib/defaults.js');
-
-const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
-});
-*/
-// ----------------------------------------------------------------------
-
 
 // test connection
 // pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)});
@@ -146,11 +124,11 @@ exports.getAllReservations = getAllReservations;
  * @return {result.rows}  A promise to the properties.
  */
 const getAllProperties = (options, limit = 10) => {
-  // Check the options object that has been passed
+  // Check the options object that has been passed.
   console.log('options', options);
   // Setup an array to hold any parameters that may be available for the query.
   const queryParams = [];
-  // Use a boolean to track whether this is the first WHERE clause
+  // Use a boolean to track whether this is the first WHERE clause.
   let multipleWheres = false;
   // Start the query with all information that comes before the WHERE clause.
   let queryString = `
@@ -158,13 +136,7 @@ const getAllProperties = (options, limit = 10) => {
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
-  /*
-  Check if a city has been passed in as an option.
-  Add the city to the params array and create a WHERE clause for the city.
-  We can use the length of the array to dynamically get the $n placeholder number.
-  Since this is the first parameter, it will be $1.
-  The % syntax for the LIKE clause must be part of the parameter, not the query.
-  */
+  // Check if a city has been passed in as an option.
   if (options.city) {
     queryParams.push(`%${options.city}%`);
     queryString += `WHERE city LIKE $${queryParams.length} `;
@@ -177,29 +149,28 @@ const getAllProperties = (options, limit = 10) => {
     multipleWheres = true;
     queryString += `owner_id = $${queryParams.length} `;
   }
-  // Check for minimum & maximum cost parameters... here, both are passed
+  // Check for minimum & maximum cost parameters... here, both are passed.
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
     queryString += multipleWheres ? `AND ` : 'WHERE ';
     multipleWheres = true;
     queryParams.push(options.minimum_price_per_night, options.maximum_price_per_night);
     queryString += `cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length} `;
   }
-  // Only by minimum price per night
+  // Only by minimum price per night.
   if (options.minimum_price_per_night && !options.maximum_price_per_night) {
     queryString += multipleWheres ? `AND ` : 'WHERE ';
     multipleWheres = true;
     queryParams.push(options.minimum_price_per_night);
     queryString += `cost_per_night >= $${queryParams.length} `;
   }
-  // Only by maximum price per night
+  // Only by maximum price per night.
   if (!options.minimum_price_per_night && options.maximum_price_per_night) {
     queryString += multipleWheres ? `AND ` : 'WHERE ';
     multipleWheres = true;
     queryParams.push(options.maximum_price_per_night);
     queryString += `cost_per_night <= $${queryParams.length} `;
   }
-
-  // Add any query that comes after the WHERE clause.
+  // Continue with the query following the WHERE clause.
   queryString += `
   GROUP BY properties.id 
   `;
