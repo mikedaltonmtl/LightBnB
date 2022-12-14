@@ -1,11 +1,19 @@
+// Import database configuration from dotenv file
+require('dotenv').config({ path: './.env' });
+
+const user = process.env.USERNAME || 'vagrant';
+const password = process.env.PASSWORD || '123';
+const host = process.env.HOST || 'localhost';
+const database = process.env.DATABASE || 'lightbnb';
+
 // Create pool to connect to lightbnb database
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
+  user,
+  password,
+  host,
+  database
 });
 
 module.exports = {

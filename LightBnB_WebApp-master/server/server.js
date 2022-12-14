@@ -1,3 +1,6 @@
+// Import database configuration from dotenv file
+require('dotenv').config({ path: './.env' });
+
 const database = require('./database');
 const apiRoutes = require('./apiRoutes');
 const userRoutes = require('./userRoutes');
