@@ -56,20 +56,20 @@ This project is part of my learnings at Lighthouse Labs.
 │   │   └── index.html
 │   ├── sass
 │   └── server
-│     ├── db
-│     │   └── index.js
-│     ├── json
-│     ├── queries
-│     │   ├── properties.js
-│     │   ├── reservations.js
-│     │   └── users.js
-│     │
-│     ├── apiRoutes.js
-│     ├── database.js
-│     ├── server.js
-│     └── userRoutes.js
-│
-├── .env
+│   │ ├── db
+│   │ │   └── index.js
+│   │ ├── json
+│   │ ├── queries
+│   │ │   ├── properties.js
+│   │ │   ├── reservations.js
+│   │ │   └── users.js
+│   │ │
+│   │ ├── apiRoutes.js
+│   │ ├── database.js
+│   │ ├── server.js
+│   │ └── userRoutes.js
+│   │
+│   └── .env
 │
 ├── migrations
 │   ├── 01_schema.sql
