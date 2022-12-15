@@ -1,6 +1,3 @@
--- PostgreSQL instruction to run file:
--- \i migrations/02_stretch.sql
-
 DROP TABLE IF EXISTS rates CASCADE;
 DROP TABLE IF EXISTS guest_reviews CASCADE;
 

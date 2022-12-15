@@ -2,9 +2,6 @@
 -- CREATE DATABASE lightbnb;
 -- \c lightbnb
 
--- PostgreSQL instruction to run file:
--- \i migrations/01_schema.sql
-
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS properties CASCADE;
 DROP TABLE IF EXISTS reservations CASCADE;

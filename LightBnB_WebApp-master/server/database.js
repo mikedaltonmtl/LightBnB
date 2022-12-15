@@ -1,5 +1,4 @@
-// Use database adapter file (index.js) to interact with PostgreSQL DB.
-const db = require('./db/index');
+// The SQL queries have been modularized by entity in the 'queries' folder
 
 /// Users
 const { getUserWithEmail, getUserWithId, addUser } = require('./queries/users');
